@@ -10,14 +10,21 @@ using UnityEngine;
 
 public class NormalAttack : MonoBehaviour
 {
-    public float AttackRate = 3;
+    //用于攻速
     public float currentTime;
     public float AttackRateUpdate;
 
     private Animator m_animator;
 
+    private static NormalAttack instance;
+    public static NormalAttack getInstance()
+    {
+        return instance;
+    }
+
     private void Awake()
     {
+        instance = this;
         m_animator = GetComponentInChildren<Animator>();
     }
 
@@ -42,13 +49,21 @@ public class NormalAttack : MonoBehaviour
      * 3.被攻击者生存 
      * 4.角色无"眩晕"等状态   
     */
-    void doAttack()
+    public void doAttack()
     {
-        if (currentTime - AttackRateUpdate > AttackRate)// && TODO:满足以上条件)
+        // && TODO:满足以上条件)
+        if (currentTime - AttackRateUpdate > Character.getInstance().CharacterAttackRate
+            && Character.getInstance().status != Character.CharacterStatus.Die)
         {
             AttackRateUpdate = Time.time;
             m_animator.SetFloat("NormalAttackWay", Random.Range(0, 4));  //普攻四种攻击动画
-            m_animator.SetBool("isNormalAttack", true);           
+            m_animator.SetBool("isNormalAttack", true);
         }
+    }
+
+    public void finishAttack()
+    {
+        //TODO:被攻击者伤血
+        m_animator.SetBool("isNormalAttack", false);
     }
 }
