@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NormalAttackAnimControler : StateMachineBehaviour
+public class IdleAnimControler : StateMachineBehaviour
 {
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -12,13 +12,13 @@ public class NormalAttackAnimControler : StateMachineBehaviour
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex){
-    //
+    //   
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool("isNormalAttack", false);
+        Idle.getInstance().doIdleAnm();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here

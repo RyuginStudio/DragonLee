@@ -35,17 +35,6 @@ public class NormalAttack : MonoBehaviour
         doAttack();
     }
 
-    //普攻四种攻击动画
-    enum NormalAttackAnim
-    {
-        attack1,
-        attack2,
-        attack3,
-        attack4
-    }
-
-    NormalAttackAnim attackAnm;
-
     /*
      * 执行普攻条件：
      * 1.角色攻速
@@ -58,31 +47,8 @@ public class NormalAttack : MonoBehaviour
         if (currentTime - AttackRateUpdate > AttackRate)// && TODO:满足以上条件)
         {
             AttackRateUpdate = Time.time;
-
-            m_animator.SetBool("isNormalAttack", true);
-
-            attackAnm = (NormalAttackAnim)(Random.Range(0, 4));
-
-            //Debug.Log(attackMode);
-
-            switch (attackAnm)
-            {
-                case NormalAttackAnim.attack1:
-                    m_animator.SetFloat("NormalAttackWay", 0.06589147f);
-                    break;
-                case NormalAttackAnim.attack2:
-                    m_animator.SetFloat("NormalAttackWay", 0.377261f);
-                    break;
-                case NormalAttackAnim.attack3:
-                    m_animator.SetFloat("NormalAttackWay", 0.6886305f);
-                    break;
-                case NormalAttackAnim.attack4:
-                    m_animator.SetFloat("NormalAttackWay", 1);
-                    break;
-                default:
-                    m_animator.SetFloat("NormalAttackWay", 1);
-                    break;
-            }
+            m_animator.SetFloat("NormalAttackWay", Random.Range(0, 4));  //普攻四种攻击动画
+            m_animator.SetBool("isNormalAttack", true);           
         }
     }
 }
