@@ -8,7 +8,7 @@ public class IdleAnimControler : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetFloat("IdleWay", 0);  //进入状态idle强制刷为第一个动画
+        animator.SetFloat("IdleWay", Random.Range(0, 2));  //进入状态idle强制刷为树的第1或第2个动画
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
