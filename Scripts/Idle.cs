@@ -28,7 +28,7 @@ public class Idle : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        AudioControler.getInstance().SE_Smelly.PlayDelayed(2);
     }
 
     // Update is called once per frame
