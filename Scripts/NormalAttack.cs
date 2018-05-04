@@ -10,6 +10,12 @@ using UnityEngine;
 
 public class NormalAttack : MonoBehaviour
 {
+    //已经进入攻击状态
+    public bool beInAttackStatus = false;
+
+    //普攻目标
+    public GameObject attackTargetObj;
+
     //用于攻速
     public float currentTime;
     public float AttackRateUpdate;
@@ -39,15 +45,17 @@ public class NormalAttack : MonoBehaviour
     {
         currentTime = Time.time;
 
-        doAttack();
+        MoveAndAttackTargetObj();
+
+        //doAttack();
     }
 
     /*
      * 执行普攻条件：
      * 1.角色攻速
      * 2.角色生存
-     * 3.被攻击者生存 
-     * 4.角色无"眩晕"等状态   
+     * 3.被攻击者生存
+     * 4.角色无"眩晕"等状态
     */
     public void doAttack()
     {
@@ -65,5 +73,42 @@ public class NormalAttack : MonoBehaviour
     {
         //TODO:被攻击者伤血
         m_animator.SetBool("isNormalAttack", false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == attackTargetObj)
+            beInAttackStatus = true;
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject == attackTargetObj)
+            beInAttackStatus = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == attackTargetObj)
+            beInAttackStatus = false;
+    }
+
+    public void MoveAndAttackTargetObj()
+    {
+        if (attackTargetObj && !beInAttackStatus)
+        {
+            //Debug.Log("MoveAndAttackTargetObj()");
+            Run.getInstance().RunToPos(attackTargetObj.transform.position);              //坐标
+            SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向
+        }
+        else if (attackTargetObj && beInAttackStatus)
+        {
+            Run.getInstance().finishRun();
+            doAttack();
+        }
+        else if (!attackTargetObj)
+        {
+            beInAttackStatus = false;
+        }
     }
 }

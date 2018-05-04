@@ -34,7 +34,7 @@ public class MK_Controler : MonoBehaviour
     }
     public void MouseRightButtonUp()
     {
-        if (Input.GetKey(KeyCode.Mouse1))
+        if (!Input.GetKey(KeyCode.Mouse1))
         {
             MoveOrAttackSwitch = false;
         }
@@ -47,11 +47,27 @@ public class MK_Controler : MonoBehaviour
             //Debug.Log("MouseToMove()");
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
-            
-            Physics.Raycast(ray, out hitInfo);
+
+            Physics.Raycast(ray, out hitInfo, 1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Enemy"));
             //Debug.Log(hitInfo.point);
-            Run.getInstance().RunToPos(hitInfo.point);              //坐标
-            SmoothLookAt.getInstance().Init_Rotate(hitInfo.point);  //朝向
+            if (hitInfo.collider.tag == "Terrain")
+            {
+                //Debug.Log("Terrain");
+                Run.getInstance().RunToPos(hitInfo.point);              //坐标
+                SmoothLookAt.getInstance().Init_Rotate(hitInfo.point);  //朝向
+
+                NormalAttack.getInstance().attackTargetObj = null;
+            }
+            else if (hitInfo.collider.tag == "Enemy")
+            {
+                //Debug.Log("Enemy");
+                NormalAttack.getInstance().attackTargetObj = hitInfo.collider.gameObject;
+            }
+            else
+            {
+                NormalAttack.getInstance().attackTargetObj = null;  //清空普攻目标
+            }
+
         }
     }
 }

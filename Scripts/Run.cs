@@ -5,7 +5,7 @@ using UnityEngine;
 public class Run : MonoBehaviour
 {
     public bool isRun = false;
-    public float runSpeed = 1;
+    public float runSpeed = 8;
     public Vector3 runTargetPos;
 
     private static Run instance;
