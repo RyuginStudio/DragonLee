@@ -84,7 +84,7 @@ public class SmoothLookAt : MonoBehaviour
     void Update()
     {
         Rotate_Func();
-
+        
         //角度修正 => 确保角色rotation的x和z永远为0
         transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
     }
