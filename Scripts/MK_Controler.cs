@@ -10,6 +10,9 @@ using UnityEngine;
 
 public class MK_Controler : MonoBehaviour
 {
+    //必须用EventTrigger限定开关
+    public bool MoveOrAttackSwitch = false;
+
     // Use this for initialization
     void Start()
     {
@@ -19,16 +22,32 @@ public class MK_Controler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MouseToMove();
+    }
 
+    public void MouseRightButtonDown()
+    {
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            MoveOrAttackSwitch = true;
+        }
+    }
+    public void MouseRightButtonUp()
+    {
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            MoveOrAttackSwitch = false;
+        }
     }
 
     public void MouseToMove()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse1))  //鼠标右键限定
+        if (Input.GetKey(KeyCode.Mouse1) && MoveOrAttackSwitch)  //鼠标右键限定
         {
             //Debug.Log("MouseToMove()");
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
+            
             Physics.Raycast(ray, out hitInfo);
             //Debug.Log(hitInfo.point);
             Run.getInstance().RunToPos(hitInfo.point);              //坐标
