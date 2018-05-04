@@ -1,7 +1,7 @@
 ﻿/*
  * 时间：2018年5月1日16:10:38
  * 作者：vszed
- * 功能：英雄普攻
+ * 功能：英雄普攻 => 普通攻击造成的伤害在脚本Walk_A_Hurt
  */
 
 using System.Collections;
@@ -71,7 +71,6 @@ public class NormalAttack : MonoBehaviour
 
     public void finishAttack()
     {
-        //TODO:被攻击者伤血
         m_animator.SetBool("isNormalAttack", false);
     }
 
@@ -97,13 +96,30 @@ public class NormalAttack : MonoBehaviour
     {
         if (attackTargetObj && !beInAttackStatus)
         {
-            //Debug.Log("MoveAndAttackTargetObj()");
-            Run.getInstance().RunToPos(attackTargetObj.transform.position);              //坐标
-            SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向
+            var dir = attackTargetObj.transform.position - transform.position;
+            Ray ray_characToTarget = new Ray(transform.position, dir);
+            Debug.DrawRay(transform.position, dir, Color.red);
+            RaycastHit info;
+            if (Physics.Raycast(ray_characToTarget, out info, 1 << LayerMask.NameToLayer("Enemy")))
+            {
+                if (Vector3.Distance(info.point, transform.position) > 3)  //在攻击范围外才需要跑动
+                {
+                    //Debug.Log("MoveAndAttackTargetObj()");
+                    Run.getInstance().RunToPos(attackTargetObj.transform.position);              //坐标
+                    SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向      
+                }
+                else
+                {
+                    Run.getInstance().finishRun();
+                    SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向    
+                    doAttack();
+                }
+            }
         }
         else if (attackTargetObj && beInAttackStatus)
         {
             Run.getInstance().finishRun();
+            SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向     
             doAttack();
         }
         else if (!attackTargetObj)
