@@ -11,30 +11,25 @@ using UnityEngine;
 public class Walk_A_Hurt : MonoBehaviour
 {
     public int score;
-    private float currentTime;
-    private float update;
 
     // Use this for initialization
     void Start()
     {
-        currentTime = Time.time;
-        update = Time.time;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentTime = Time.time;
+
     }
 
-    //平A伤害
     public void ValidAttacks()
     {
-        score += 10;
-        if (score == 150)
+        if (NormalAttack.getInstance().attackTargetObj)  //有效攻击
         {
-            float costTime = currentTime - update;
-            Debug.Log(costTime);
+            Debug.Log("ValidAttacks()");
+            NormalAttack.getInstance().attackTargetObj.GetComponent<InjureSystem>().beInjured(100);
         }
     }
 }
