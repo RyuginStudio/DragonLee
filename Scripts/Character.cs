@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    //HP 生命值
+    public float HealthPoint = 100;
+
+    //SP 法力值
+    public float MagicPoint = 100;
+
     private static Character instance;
 
     public static Character getInstance()

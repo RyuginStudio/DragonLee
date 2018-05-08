@@ -39,11 +39,12 @@ public class InjureSystem : MonoBehaviour
     {
         if (GetComponent<Character>())
         {
-            Character.getInstance().blood -= value;
+            Character.getInstance().HealthPoint -= value;
         }
         else if (GetComponent<Enemy>())
         {
-            Enemy.getInstance().blood -= value;
+            GetComponent<Enemy>().confirmAttackTarget(GameObject.FindWithTag("Player"));
+            GetComponent<Enemy>().HealthPoint -= value;
         }
     }
 }

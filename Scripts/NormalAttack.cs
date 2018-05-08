@@ -76,19 +76,19 @@ public class NormalAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == attackTargetObj)
+        if (other.GetComponentInParent<Enemy>() && other.GetComponentInParent<Enemy>().gameObject == attackTargetObj)
             beInAttackStatus = true;
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject == attackTargetObj)
+        if (other.GetComponentInParent<Enemy>() && other.GetComponentInParent<Enemy>().gameObject == attackTargetObj)
             beInAttackStatus = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == attackTargetObj)
+        if (other.GetComponentInParent<Enemy>() && other.GetComponentInParent<Enemy>().gameObject == attackTargetObj)
             beInAttackStatus = false;
     }
 

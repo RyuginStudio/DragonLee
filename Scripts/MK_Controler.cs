@@ -63,7 +63,7 @@ public class MK_Controler : MonoBehaviour
                 //Debug.Log("Enemy");
                 if (NormalAttack.getInstance().attackTargetObj != null)  //如果以前有目标需要重刷beIn的值
                     NormalAttack.getInstance().beInAttackStatus = false;
-                NormalAttack.getInstance().attackTargetObj = hitInfo.collider.gameObject;
+                NormalAttack.getInstance().attackTargetObj = hitInfo.collider.GetComponentInParent<Enemy>().gameObject;
             }
             else
             {
