@@ -28,7 +28,7 @@ public class Character : MonoBehaviour
     public CharacterStatus status;
 
     //攻速
-    public float CharacterAttackRate = 3;
+    public float CharacterAttackRate = 1;
 
     private void Awake()
     {
