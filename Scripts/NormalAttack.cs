@@ -10,9 +10,6 @@ using UnityEngine;
 
 public class NormalAttack : MonoBehaviour
 {
-    //已经进入攻击状态
-    public bool beInAttackStatus = false;
-
     //普攻目标
     public GameObject attackTargetObj;
 
@@ -74,57 +71,61 @@ public class NormalAttack : MonoBehaviour
         m_animator.SetBool("isNormalAttack", false);
     }
 
+    //存放触发器内敌人
+    public List<GameObject> EnemyTriggerList;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<Enemy>() && other.GetComponentInParent<Enemy>().gameObject == attackTargetObj)
-            beInAttackStatus = true;
+        //进入触发器的敌人加入列表
+        foreach (var item in EnemyTriggerList)
+        {
+            if (!other.GetComponentInParent<Enemy>() || item == other.GetComponentInParent<Enemy>().gameObject)
+                return;
+        }
+
+        if (other.GetComponentInParent<Enemy>())
+            EnemyTriggerList.Add(other.GetComponentInParent<Enemy>().gameObject);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponentInParent<Enemy>() && other.GetComponentInParent<Enemy>().gameObject == attackTargetObj)
-            beInAttackStatus = true;
+        //停留触发器的敌人加入列表
+        foreach (var item in EnemyTriggerList)
+        {
+            if (!other.GetComponentInParent<Enemy>() || item == other.GetComponentInParent<Enemy>().gameObject)
+                return;
+        }
+
+        if (other.GetComponentInParent<Enemy>())
+            EnemyTriggerList.Add(other.GetComponentInParent<Enemy>().gameObject);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponentInParent<Enemy>() && other.GetComponentInParent<Enemy>().gameObject == attackTargetObj)
-            beInAttackStatus = false;
+        //删除离开触发器的敌人
+        for (var idx = 0; idx < EnemyTriggerList.Count; idx++)  //不能用forEach报异常
+        {
+            if (other.GetComponentInParent<Enemy>() && EnemyTriggerList[idx] == other.GetComponentInParent<Enemy>().gameObject)
+                EnemyTriggerList.Remove(EnemyTriggerList[idx]);
+        }
     }
 
     public void MoveAndAttackTargetObj()
     {
-        if (attackTargetObj && !beInAttackStatus)
+        if (attackTargetObj)
         {
-            var dir = attackTargetObj.transform.position - transform.position;
-            Ray ray_characToTarget = new Ray(transform.position, dir);
-            Debug.DrawRay(transform.position, dir, Color.red);
-            RaycastHit info;
-            if (Physics.Raycast(ray_characToTarget, out info, 1 << LayerMask.NameToLayer("Enemy")))
+            foreach (var item in EnemyTriggerList)
             {
-                if (Vector3.Distance(info.point, transform.position) > 3)  //在攻击范围外才需要跑动
-                {
-                    //Debug.Log("MoveAndAttackTargetObj()");
-                    Run.getInstance().RunToPos(attackTargetObj.transform.position);              //坐标
-                    SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向      
-                }
-                else
+                if (item == attackTargetObj)
                 {
                     Run.getInstance().finishRun();
                     SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向    
                     doAttack();
+                    return;
                 }
             }
-        }
-        else if (attackTargetObj && beInAttackStatus)
-        {
-            Run.getInstance().finishRun();
-            SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向     
-            doAttack();
-        }
-        else if (!attackTargetObj)
-        {
-            beInAttackStatus = false;
+            Run.getInstance().RunToPos(attackTargetObj.transform.position);              //坐标
+            SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向      
         }
     }
 }
