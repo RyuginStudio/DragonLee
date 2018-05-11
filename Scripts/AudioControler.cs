@@ -33,5 +33,4 @@ public class AudioControler : MonoBehaviour
 
 
     //SE
-    public AudioSource SE_Smelly;
 }
