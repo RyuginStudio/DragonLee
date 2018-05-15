@@ -50,7 +50,8 @@ public class MK_Controler : MonoBehaviour
 
             Physics.Raycast(ray, out hitInfo, 1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Enemy"));
             //Debug.Log(hitInfo.point);
-            if (hitInfo.collider.tag == "Terrain")
+            if (hitInfo.collider.tag == "Terrain"
+                && Mathf.Abs(Vector3.Distance(GameObject.FindWithTag("Player").transform.position, hitInfo.point)) > 1)  //加限制
             {
                 //Debug.Log("Terrain");
                 Run.getInstance().RunToPos(hitInfo.point);              //坐标

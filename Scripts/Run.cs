@@ -16,10 +16,12 @@ public class Run : MonoBehaviour
     }
 
     private Animator m_animator;
+    private CharacterController m_characterController;
 
     private void Awake()
     {
         m_animator = GetComponentInChildren<Animator>();
+        m_characterController = GetComponent<CharacterController>();
         instance = this;
     }
 
@@ -47,13 +49,11 @@ public class Run : MonoBehaviour
     {
         if (this.isRun)
         {
-            transform.position = Vector3.MoveTowards(transform.position, this.runTargetPos, this.runSpeed * Time.deltaTime);
+            Vector3 v = Vector3.ClampMagnitude(runTargetPos - transform.position, runSpeed * Time.deltaTime);  //注解3 限制移动       
+            m_characterController.Move(v);
 
-            if (transform.position == runTargetPos)
-            {
-                //Debug.Log(runTargetPos);
+            if (Mathf.Abs(Vector3.Distance(transform.position, runTargetPos)) <= .5f)
                 finishRun();
-            }
         }
     }
 
