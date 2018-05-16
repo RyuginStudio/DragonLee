@@ -63,6 +63,16 @@ public class NormalAttack : MonoBehaviour
             AttackRateUpdate = Time.time;
             m_animator.SetFloat("NormalAttackWay", Random.Range(0, 4));  //普攻四种攻击动画
             m_animator.SetBool("isNormalAttack", true);
+
+            //攻击音效
+            GetComponentInChildren<HeroSounds>().playDialogueUpdate = Time.time;
+            if (Random.Range(1, 4) % 3 == 0)
+            {
+                // 1/3概率触发
+                var audioSource = GetComponentInChildren<HeroSounds>().GetComponent<AudioSource>();
+                audioSource.clip = GetComponentInChildren<HeroSounds>().normalAttackVoice[Random.Range(0, GetComponentInChildren<HeroSounds>().normalAttackVoice.Length)];
+                audioSource.Play();
+            }
         }
     }
 
@@ -119,7 +129,7 @@ public class NormalAttack : MonoBehaviour
                 if (item == attackTargetObj)
                 {
                     Run.getInstance().finishRun();
-                    SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向    
+                    SmoothLookAt.getInstance().Init_Rotate(attackTargetObj.transform.position);  //朝向  
                     doAttack();
                     return;
                 }

@@ -41,4 +41,5 @@ public class Idle : MonoBehaviour
     {
         m_animator.SetFloat("IdleWay", Random.Range(0, 5));
     }
+
 }

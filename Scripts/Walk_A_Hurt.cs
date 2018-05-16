@@ -30,6 +30,11 @@ public class Walk_A_Hurt : MonoBehaviour
         {
             Debug.Log("ValidAttacks()");
             NormalAttack.getInstance().attackTargetObj.GetComponent<InjureSystem>().beInjured(100);
+
+            //攻击特效
+            var sfxAudio = GameObject.Find("SFX").GetComponent<AudioSource>();
+            sfxAudio.clip = GameObject.FindWithTag("Player").GetComponentInChildren<HeroSounds>().normalAttackSFX[Random.Range(0, GameObject.FindWithTag("Player").GetComponentInChildren<HeroSounds>().normalAttackSFX.Length)];
+            sfxAudio.Play();
         }
     }
 }
