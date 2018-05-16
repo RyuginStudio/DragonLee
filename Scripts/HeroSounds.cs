@@ -8,7 +8,7 @@ public class HeroSounds : MonoBehaviour
     public float playDialogueUpdate;
     public float dialogueRate;
 
-    AudioSource audioSource;
+    public AudioSource audioSourceDialogue;
 
     private static HeroSounds instance;
 
@@ -24,7 +24,7 @@ public class HeroSounds : MonoBehaviour
         currentTime = Time.time;
         playDialogueUpdate = Time.time;
 
-        audioSource = GetComponent<AudioSource>();
+        audioSourceDialogue = GetComponent<AudioSource>();
     }
 
     // Use this for initialization
@@ -48,10 +48,10 @@ public class HeroSounds : MonoBehaviour
             dialogueRate = Random.Range(10, 20);
             playDialogueUpdate = Time.time;
 
-            audioSource.clip = dialogue[Random.Range(0, 16)];
+            audioSourceDialogue.clip = dialogue[Random.Range(0, 16)];
 
-            if (!audioSource.isPlaying)
-                audioSource.Play();
+            if (!audioSourceDialogue.isPlaying)
+                audioSourceDialogue.Play();
         }
     }
 

@@ -66,7 +66,7 @@ public class NormalAttack : MonoBehaviour
 
             //攻击音效
             GetComponentInChildren<HeroSounds>().playDialogueUpdate = Time.time;
-            if (Random.Range(1, 4) % 3 == 0)
+            if (Random.Range(1, 4) % 3 == 0 && !GetComponentInChildren<HeroSounds>().audioSourceDialogue.isPlaying)  //不会打断英雄dialogue
             {
                 // 1/3概率触发
                 var audioSource = GetComponentInChildren<HeroSounds>().GetComponent<AudioSource>();
