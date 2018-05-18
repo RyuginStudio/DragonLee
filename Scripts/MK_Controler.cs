@@ -26,6 +26,7 @@ public class MK_Controler : MonoBehaviour
         MouseToMove();
         SpaceToLocateSelf();
         cameraCroll();
+        stopAllAct();
     }
 
     public void MouseRightButtonDown()
@@ -105,6 +106,17 @@ public class MK_Controler : MonoBehaviour
                 trans_mainCamera.position = new Vector3(trans_mainCamera.position.x, trans_mainCamera.position.y, trans_mainCamera.position.z + 20 * Time.deltaTime);
             else if (Input.mousePosition.y <= 25)
                 trans_mainCamera.position = new Vector3(trans_mainCamera.position.x, trans_mainCamera.position.y, trans_mainCamera.position.z - 20 * Time.deltaTime);
+        }
+    }
+
+    //按S停下动作
+    public void stopAllAct()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            GameObject.FindWithTag("Player").GetComponent<Run>().finishRun();
+            GameObject.FindWithTag("Player").GetComponent<NormalAttack>().attackTargetObj = null;
+            GameObject.FindWithTag("Player").GetComponent<NormalAttack>().finishAttack();
         }
     }
 }
