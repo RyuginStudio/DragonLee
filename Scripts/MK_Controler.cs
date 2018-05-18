@@ -16,13 +16,16 @@ public class MK_Controler : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        //摄像机偏移量
+        offset = trans_character.position - trans_mainCamera.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         MouseToMove();
+        SpaceToLocateSelf();
+        cameraCroll();
     }
 
     public void MouseRightButtonDown()
@@ -68,6 +71,40 @@ public class MK_Controler : MonoBehaviour
                 NormalAttack.getInstance().attackTargetObj = null;  //清空普攻目标
             }
 
+        }
+    }
+
+    public Transform trans_mainCamera;
+    public Transform trans_character;
+    private Vector3 offset;
+    public bool lockView;
+    //按下空格 => Camera定位到角色自身
+    public void SpaceToLocateSelf()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            trans_mainCamera.position = Vector3.Lerp(trans_mainCamera.position, trans_character.position - offset, Time.deltaTime * 100);
+            lockView = true;
+        }
+        else
+        {
+            lockView = false;
+        }
+    }
+
+    //镜头滚动
+    public void cameraCroll()
+    {
+        if (lockView == false) //视角未锁定前提
+        {
+            if (Input.mousePosition.x >= Screen.width - 25)
+                trans_mainCamera.position = new Vector3(trans_mainCamera.position.x + 20 * Time.deltaTime, trans_mainCamera.position.y, trans_mainCamera.position.z);
+            else if (Input.mousePosition.x <= 25)
+                trans_mainCamera.position = new Vector3(trans_mainCamera.position.x - 20 * Time.deltaTime, trans_mainCamera.position.y, trans_mainCamera.position.z);
+            if (Input.mousePosition.y >= Screen.height - 25)
+                trans_mainCamera.position = new Vector3(trans_mainCamera.position.x, trans_mainCamera.position.y, trans_mainCamera.position.z + 20 * Time.deltaTime);
+            else if (Input.mousePosition.y <= 25)
+                trans_mainCamera.position = new Vector3(trans_mainCamera.position.x, trans_mainCamera.position.y, trans_mainCamera.position.z - 20 * Time.deltaTime);
         }
     }
 }
