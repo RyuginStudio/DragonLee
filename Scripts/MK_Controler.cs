@@ -115,8 +115,7 @@ public class MK_Controler : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             GameObject.FindWithTag("Player").GetComponent<Run>().finishRun();
-            GameObject.FindWithTag("Player").GetComponent<NormalAttack>().attackTargetObj = null;
-            GameObject.FindWithTag("Player").GetComponent<NormalAttack>().finishAttack();
+            GameObject.FindWithTag("Player").GetComponent<NormalAttack>().finishAttack(true);
         }
     }
 }

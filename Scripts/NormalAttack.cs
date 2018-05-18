@@ -76,9 +76,11 @@ public class NormalAttack : MonoBehaviour
         }
     }
 
-    public void finishAttack()
+    public void finishAttack(bool destroyAttackTarget)
     {
         m_animator.SetBool("isNormalAttack", false);
+        if (destroyAttackTarget)
+            attackTargetObj = null;
     }
 
     //存放触发器内敌人
