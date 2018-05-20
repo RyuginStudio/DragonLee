@@ -47,7 +47,7 @@ public class Run : MonoBehaviour
 
     public void doRun()
     {
-        if (this.isRun)
+        if (this.isRun && Character.getInstance().status == Character.CharacterStatus.Run)
         {
             Vector3 v = Vector3.ClampMagnitude(runTargetPos - transform.position, runSpeed * Time.deltaTime);  //注解3 限制移动       
             m_characterController.Move(v);

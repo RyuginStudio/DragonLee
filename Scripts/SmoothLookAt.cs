@@ -83,8 +83,9 @@ public class SmoothLookAt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Rotate_Func();
-        
+        if (Character.getInstance().status != Character.CharacterStatus.Skill && Character.getInstance().status != Character.CharacterStatus.Die)
+            Rotate_Func();
+
         //角度修正 => 确保角色rotation的x和z永远为0
         transform.rotation = new Quaternion(0, transform.rotation.y, 0, transform.rotation.w);
     }
