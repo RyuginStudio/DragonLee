@@ -15,6 +15,8 @@ public class IdleAnimControler : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Character.getInstance().updateStatus(Character.CharacterStatus.Idle);
+        HeroSkill.getInstance().finishSkill();
+        animator.SetBool("isNormalAttack", false);
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
