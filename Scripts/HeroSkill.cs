@@ -30,6 +30,8 @@ public class HeroSkill : MonoBehaviour
         return instance;
     }
 
+    public GameObject Q_target;
+
     private void Awake()
     {
         currentTime = Time.time;
@@ -65,6 +67,7 @@ public class HeroSkill : MonoBehaviour
         if (skillStatus["Q_two_stage"] && currentTime - Q_two_stage_update > canDoTwoStageTime)
         {
             Q_two_stage_update = Time.time;
+            Q_target = null;
             skillStatus["Q_two_stage"] = false;
         }
         if (skillStatus["W_two_stage"] && currentTime - W_two_stage_update > canDoTwoStageTime)
@@ -88,21 +91,21 @@ public class HeroSkill : MonoBehaviour
                 Q_two_stage_update = Time.time;
                 canDoNextSkill = false;
 
-                if (skillStatus["Q_two_stage"])
+                if (skillStatus["Q_two_stage"] && this.Q_target != null)
                 {
-                    doSkill(1);
+                    StartCoroutine(doSkill(1));
                     skillStatus["Q_two_stage"] = false;
                 }
                 else
                 {
-                    doSkill(0);
+                    StartCoroutine(doSkill(0));
                     skillStatus["Q_two_stage"] = true;
                 }
 
             }
             else if (Input.GetKeyDown(KeyCode.W))
             {
-                //doSkill();
+                //StartCoroutine(doSkill(1));
             }
             else if (Input.GetKeyDown(KeyCode.E))
             {
@@ -111,24 +114,24 @@ public class HeroSkill : MonoBehaviour
 
                 if (skillStatus["E_two_stage"])
                 {
-                    doSkill(5);
+                    StartCoroutine(doSkill(5));
                     skillStatus["E_two_stage"] = false;
                 }
                 else
                 {
-                    doSkill(4);
+                    StartCoroutine(doSkill(4));
                     skillStatus["E_two_stage"] = true;
                 }
             }
             else if (Input.GetKeyDown(KeyCode.R))
             {
                 canDoNextSkill = false;
-                doSkill(6);
+                StartCoroutine(doSkill(6));
             }
         }
     }
 
-    void doSkill(int skillKind)
+    IEnumerator doSkill(int skillKind)
     {
         NormalAttack.getInstance().attackTargetObj = null;
         Run.getInstance().finishRun();
@@ -137,6 +140,31 @@ public class HeroSkill : MonoBehaviour
 
         switch (skillKind)
         {
+            case 0:
+                {
+                    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hitInfo;
+                    Physics.Raycast(ray, out hitInfo, 1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Enemy"));
+                    SmoothLookAt.getInstance().Init_Rotate(hitInfo.point);
+                    yield return new WaitForSeconds(.1f);
+                    var prefabQ = Instantiate(Resources.Load("Prefab/BlindMonkQ"), GameObject.Find("Q_pos").transform.position, new Quaternion());
+
+                    var vec1 = new Vector3(hitInfo.point.x, GameObject.Find("Q_pos").transform.position.y, hitInfo.point.z);
+                    var vec2 = GameObject.Find("Q_pos").transform.position;
+                    var dir = vec1 - vec2;
+                    Ray rayToTarget = new Ray(vec2, dir);
+
+                    ((GameObject)prefabQ).GetComponent<BlindMonkQ>().targetPos = rayToTarget.GetPoint(1000);
+                    break;
+                }
+            case 1:
+                {
+                    Vector3 tarPos = new Vector3(Q_target.transform.position.x, GameObject.Find("Q_pos").transform.position.y, Q_target.transform.position.z);
+                    SmoothLookAt.getInstance().Init_Rotate(tarPos);
+                    Run.getInstance().RunToPos(tarPos, true);
+                    Q_target = null;
+                    break;
+                }
             default:
                 break;
         }
@@ -146,5 +174,10 @@ public class HeroSkill : MonoBehaviour
     {
         m_animator.SetBool("isHeroSkill", false);
         canDoNextSkill = true;
+    }
+
+    public void canDoSkill()
+    {
+        m_animator.SetBool("isEndSkill", true);
     }
 }

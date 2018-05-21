@@ -15,7 +15,7 @@ public class IdleAnimControler : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         Character.getInstance().updateStatus(Character.CharacterStatus.Idle);
-        HeroSkill.getInstance().finishSkill();
+        animator.SetBool("isHeroSkill", false);
         animator.SetBool("isNormalAttack", false);
     }
 

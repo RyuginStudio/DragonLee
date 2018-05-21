@@ -10,6 +10,15 @@ using UnityEngine;
 
 public class BlindMonkQ : MonoBehaviour
 {
+    public Vector3 targetPos;
+
+    private void Awake()
+    {
+        Destroy(gameObject.GetComponent<MeshRenderer>(), .4f);
+        Destroy(gameObject.GetComponent<SphereCollider>(), .4f);
+        Destroy(gameObject, 2);
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -19,6 +28,23 @@ public class BlindMonkQ : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        move();
+    }
 
+    private void move()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPos, 50 * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            GetComponent<AudioSource>().Play();
+            HeroSkill.getInstance().Q_target = other.gameObject;
+            Destroy(gameObject.GetComponent<MeshRenderer>());
+            Destroy(gameObject.GetComponent<SphereCollider>());
+            Destroy(gameObject, 2);
+        }
     }
 }

@@ -180,7 +180,8 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: Event canDoSkill has a time (0.500000) outside the clip's
+      valid range (0.000000..0.468750). It will never be fired
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 1
