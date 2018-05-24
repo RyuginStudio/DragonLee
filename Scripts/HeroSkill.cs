@@ -19,7 +19,7 @@ public class HeroSkill : MonoBehaviour
 
 
     //技能状态：true为可激活第二段
-    Dictionary<string, bool> skillStatus;
+    public Dictionary<string, bool> skillStatus;
 
     private Animator m_animator;
 
@@ -145,7 +145,8 @@ public class HeroSkill : MonoBehaviour
                     var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hitInfo;
                     Physics.Raycast(ray, out hitInfo, 1 << LayerMask.NameToLayer("Terrain") | 1 << LayerMask.NameToLayer("Enemy"));
-                    SmoothLookAt.getInstance().Init_Rotate(hitInfo.point);
+                    //SmoothLookAt.getInstance().Init_Rotate(hitInfo.point);
+                    gameObject.transform.LookAt(hitInfo.point);
                     yield return new WaitForSeconds(.1f);
                     var prefabQ = Instantiate(Resources.Load("Prefab/BlindMonkQ"), GameObject.Find("Q_pos").transform.position, new Quaternion());
 
@@ -160,7 +161,8 @@ public class HeroSkill : MonoBehaviour
             case 1:
                 {
                     Vector3 tarPos = new Vector3(Q_target.transform.position.x, GameObject.Find("Q_pos").transform.position.y, Q_target.transform.position.z);
-                    SmoothLookAt.getInstance().Init_Rotate(tarPos);
+                    //SmoothLookAt.getInstance().Init_Rotate(tarPos);
+                    gameObject.transform.LookAt(tarPos);
                     Run.getInstance().RunToPos(tarPos, true);
                     Q_target = null;
                     break;

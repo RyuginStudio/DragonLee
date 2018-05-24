@@ -215,7 +215,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
+      - time: 0.37376484
         functionName: canDoSkill
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 2d46eefd788fc5740a434547cfcc644b,
